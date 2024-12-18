@@ -9,11 +9,11 @@ import (
 )
 
 // A function to read QRIS from QRIS image to string
-func ReadQris(qrisFile io.Reader) string {
+func ReadQris(qrisFile io.Reader) (string, error) {
 	var qrisData string
 	// Read QRIS data
 	// img, _, _ := image.Decode(qrisFile)
-	return qrisData
+	return qrisData, nil
 }
 
 func validateQrisData(qrisData string) bool {
