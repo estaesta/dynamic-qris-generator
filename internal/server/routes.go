@@ -1,8 +1,7 @@
 package server
 
 import (
-	"encoding/json"
-	"log"
+	"dynamic-qris-generator/internal/server/handler"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -22,19 +21,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 		MaxAge:           300,
 	}))
 
-	r.Get("/", s.HelloWorldHandler)
+	r.Get("/", handler.HelloWorldHandler)
+	r.Post("/qris", handler.ReadQRISHandler)
+	r.Get("/qris", handler.GenerateQRISHandler)
 
 	return r
-}
-
-func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
-	resp := make(map[string]string)
-	resp["message"] = "Hello World"
-
-	jsonResp, err := json.Marshal(resp)
-	if err != nil {
-		log.Fatalf("error handling JSON marshal. Err: %v", err)
-	}
-
-	_, _ = w.Write(jsonResp)
 }
