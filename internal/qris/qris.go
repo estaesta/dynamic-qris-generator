@@ -2,18 +2,38 @@
 package qris
 
 import (
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
 
+	"github.com/makiuchi-d/gozxing"
 	_ "github.com/makiuchi-d/gozxing"
+	"github.com/makiuchi-d/gozxing/qrcode"
 	_ "github.com/makiuchi-d/gozxing/qrcode"
 )
 
 // A function to read QRIS from QRIS image to string
 func ReadQris(qrisFile io.Reader) (string, error) {
-	var qrisData string
 	// Read QRIS data
-	// img, _, _ := image.Decode(qrisFile)
-	return qrisData, nil
+	img, _, err := image.Decode(qrisFile)
+	if err != nil {
+		return "", err
+	}
+	// prepare BinaryBitmap
+	bmp, err := gozxing.NewBinaryBitmapFromImage(img)
+	if err != nil {
+		return "", err
+	}
+
+	// decode image
+	qrReader := qrcode.NewQRCodeReader()
+	result, err := qrReader.Decode(bmp, nil)
+	if err != nil {
+		return "", err
+	}
+
+	return result.GetText(), nil
 }
 
 func validateQrisData(qrisData string) bool {
