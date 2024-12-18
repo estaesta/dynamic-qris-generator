@@ -43,4 +43,28 @@ func ReadQRISHandler(w http.ResponseWriter, r *http.Request) {
 	type response struct {
 		Data string `json:"data"`
 	}
+
+	qrisFile, _, err := r.FormFile("qris")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	qrisData, err := qris.ReadQris(qrisFile)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	resp := response{
+		Data: qrisData,
+	}
+
+	jsonResp, err := json.Marshal(resp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	_, _ = w.Write(jsonResp)
 }
