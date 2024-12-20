@@ -1,3 +1,4 @@
+// Package server contains the server object and the NewServer function that creates a new server.
 package server
 
 import (
@@ -7,13 +8,16 @@ import (
 	"strconv"
 	"time"
 
+	// Load environment variables from .env file
 	_ "github.com/joho/godotenv/autoload"
 )
 
+// Server object
 type Server struct {
 	port int
 }
 
+// NewServer creates a new server
 func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	NewServer := &Server{

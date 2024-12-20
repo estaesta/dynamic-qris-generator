@@ -1,6 +1,7 @@
 package server
 
 import (
+	"dynamic-qris-generator/internal/server/handler"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -8,8 +9,7 @@ import (
 )
 
 func TestHandler(t *testing.T) {
-	s := &Server{}
-	server := httptest.NewServer(http.HandlerFunc(s.HelloWorldHandler))
+	server := httptest.NewServer(http.HandlerFunc(handler.HelloWorldHandler))
 	defer server.Close()
 	resp, err := http.Get(server.URL)
 	if err != nil {

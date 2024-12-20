@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/cors"
 )
 
+// RegisterRoutes registers middleware and all routes
 func (s *Server) RegisterRoutes() http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -22,8 +23,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}))
 
 	r.Get("/", handler.HelloWorldHandler)
-	r.Post("/qris", handler.ReadQRISHandler)
-	r.Get("/qris", handler.GenerateQRISHandler)
+	r.Post("/api/qris/extract", handler.ReadQRISHandler)
+	r.Post("/api/qris/convert", handler.GenerateQRISHandler)
 
 	return r
 }

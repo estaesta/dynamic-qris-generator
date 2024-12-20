@@ -1,10 +1,13 @@
 package handler
 
 import (
+	"bytes"
 	"dynamic-qris-generator/internal/qris"
 	"encoding/json"
+	"image/jpeg"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,7 +24,8 @@ func HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
 
 func GenerateQRISHandler(w http.ResponseWriter, r *http.Request) {
 	type request struct {
-		Data string `json:"data"`
+		Data   string `json:"data"`
+		Amount int    `json:"amount"`
 	}
 	var req = request{}
 	err := json.NewDecoder(r.Body).Decode(&req)
@@ -30,13 +34,24 @@ func GenerateQRISHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := qris.DataToQrisDynamic(req.Data)
+	img, err := qris.DataToQrisDynamic(req.Data, req.Amount)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	_, err = w.Write(res)
+	buffer := new(bytes.Buffer)
+	if err := jpeg.Encode(buffer, img, nil); err != nil {
+		log.Println("unable to encode image.")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "image/jpeg")
+	w.Header().Set("Content-Length", strconv.Itoa(len(buffer.Bytes())))
+	if _, err := w.Write(buffer.Bytes()); err != nil {
+		log.Println("unable to write image.")
+	}
 }
 
 func ReadQRISHandler(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +65,7 @@ func ReadQRISHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	qrisData, err := qris.ReadQris(qrisFile)
+	qrisData, err := qris.ExtractQris(qrisFile)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
