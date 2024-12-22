@@ -59,6 +59,9 @@ func ReadQRISHandler(w http.ResponseWriter, r *http.Request) {
 		Data string `json:"data"`
 	}
 
+	// limit file size to 5MB
+	r.Body = http.MaxBytesReader(w, r.Body, 5<<20)
+
 	qrisFile, _, err := r.FormFile("qris")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
