@@ -22,7 +22,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 		MaxAge:           300,
 	}))
 
-	r.Get("/", handler.HelloWorldHandler)
+	r.Get("/api", handler.HelloWorldHandler)
 	r.Post("/api/qris/extract", handler.ReadQRISHandler)
 	r.Post("/api/qris/convert", handler.GenerateQRISHandler)
 
