@@ -11,7 +11,7 @@ pipeline {
       steps {
         sh '''docker stop qris-api || true
 docker rm qris-api || true
-docker run -d --name qris-api -p $PORT:8080 -e PORT=8080 $DOCKER_IMAGE'''
+docker run -d --name qris-api -p $PORT:8080 -e PORT=8080 --restart unless-stopped $DOCKER_IMAGE'''
       }
     }
 
