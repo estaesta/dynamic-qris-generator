@@ -2,9 +2,13 @@
 package qris
 
 import (
-	"fmt"
 	"image"
+	// "image/jpeg" for decode image
+	_ "image/jpeg"
+	// "image/png" for decode image
+	_ "image/png"
 
+	"fmt"
 	"io"
 	"log"
 	"strconv"
