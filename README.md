@@ -2,6 +2,8 @@
 
 An API to generate dynamic QRIS from a static QRIS
 
+Demo: https://qris.ddpaud.my.id
+
 ## Endpoints
 
 ### 1. **POST /api/qris/extract**
