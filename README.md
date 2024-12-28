@@ -40,6 +40,13 @@ This endpoint accepts QRIS data as a string and generates a dynamic QRIS image b
   - `data` : The QRIS string data that needs to be encoded into a QRIS image.
   - `amount` : The transaction amount associated with the QRIS data.
 
+```json
+{
+  "data": "00020101021126640017ID.CO.BANKBSI.WWW0118936004510000305481021000002039790303URE51440014ID.CO.QRIS.WWW0215ID10243141810570303URE5204866153033605802ID5918SABILILLAH YAYASAN6006MALANG6105651416304522C",
+  "amount": 100000
+}
+```
+
 #### Response
 - **Content-Type**: `image/jpeg`
 - **Status**: `200 OK`
